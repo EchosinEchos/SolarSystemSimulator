@@ -1,0 +1,56 @@
+ArrayList<Planete> planetes = new ArrayList<Planete>();
+int rad = 5;
+
+void setup(){
+  //size(640, 400);
+  fullScreen(P3D);
+ 
+  
+  planetes.add(new Planete(width/2, height/2, 50, 3000000000000f));
+  planetes.add(new Planete(100, 100, 10, 100000000f));
+  //planetes.get(0).ax = 1;
+}
+
+
+void draw(){
+  background(150);
+  
+  for(Planete p : planetes){
+    for(Planete p2 : planetes){
+      if(p2 != p  && p2 != null){
+        p.update(p2);
+      }
+  }
+  p.move();
+  p.show();
+  }
+  for(int i = 0; i < planetes.size(); i++){
+    if(planetes.get(i).del){
+     planetes.remove(i); 
+    }
+  }
+  
+  /*planetes.get(1).update(planetes.get(0));
+  planetes.get(0).update(planetes.get(1));
+  planetes.get(0).show();
+  planetes.get(1).show();
+  /*float angle = atan2(mouseY+height/2, mouseX+width/2);
+  line(width/2, height/2, 100*cos(angle), 100 * sin(angle));
+  rotate(angle);
+  rect(-30, -5, 60, 10);*/ 
+  
+
+if(mousePressed){
+  ellipse(mouseX, mouseY, rad, rad);
+  rad ++;
+  
+}
+
+//rotateZ(45);
+
+}
+
+void mouseReleased(){
+  planetes.add(new Planete(mouseX, mouseY, rad, rad * 100000000000f));
+  rad = 5;
+}
