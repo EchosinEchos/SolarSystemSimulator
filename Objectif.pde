@@ -12,7 +12,7 @@ class objectif{
   
   void show(){
     fill(c);
-    ellipse(this.pos.x, this.pos.y, radius, radius);
+    ellipse(this.pos.x*Xfactor, this.pos.y*Yfactor, radius*Xfactor, radius*Yfactor);
   }
   
   boolean checkWin(ArrayList<Planete> list){

@@ -28,10 +28,12 @@ class Planete  {
  }
  
  void show(){
+
   /*translate(this.pos.x, this.pos.y, 0);
   sphere(radius); */
   fill(c);
-  ellipse(pos.x, pos.y, radius, radius);
+  ellipse(pos.x*Xfactor, pos.y*Yfactor, radius*Xfactor, radius*Yfactor);
+
  }
  void move(){
    vx += ax;

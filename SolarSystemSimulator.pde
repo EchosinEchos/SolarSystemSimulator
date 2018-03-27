@@ -8,7 +8,16 @@ color c;
 
 int tailleVert = 150, tailleAcceleration = 350;
 
+float Xfactor, Yfactor;
+
+
+
 void setup(){
+  Xfactor = width / 1080f;
+  Yfactor = height / 1920f;
+  
+   
+  
   //size(400, 800);
   planetes = new ArrayList<Planete>();
   fix = new ArrayList<Planete>();
@@ -16,13 +25,14 @@ void setup(){
   fullScreen();
   frameRate(60);
   noStroke();
-  obj = new objectif(new PVector(int(random(100, width-100)), 150), 100, color(50,50,250));
+  orientation(PORTRAIT);
+  obj = new objectif(new PVector(int(random(50, (width-50))), 150), int(100), color(50,50,250));
 
-  int yoff = 100;
-  for(int i = 1; i < random(1,5); i++){
-    int rad = int(random(50, 400));
-    yoff += rad;// +(int)random(0,100);
-    fix.add(new Planete(int(random(rad,width-rad*2)), yoff , rad, rad * 1000000000000f, getRandomColor()));
+  int yoff = int(250);
+  for(int i = 1; i < random(1,4); i++){
+    int rad = int(random(50, 300));
+    yoff += rad/2 + random(20,100);// +(int)random(0,100);
+    fix.add(new Planete(int(random(rad/2,1080-rad/2)), int(yoff) , rad, rad * 1000000000000f, getRandomColor()));
     yoff += rad/2;
   }
   
@@ -36,16 +46,18 @@ void setup(){
 
 
 void draw(){
-  background(60);
+  //scale(float(width)/1080, float(height)/1920);
+  
+  background(0);
   noStroke();
   
   strokeWeight(2);
   stroke(255);
   fill(#757575);
-  rect(0, height-tailleVert-tailleAcceleration, width , height-tailleVert);
+  rect(0, (height-tailleVert*Yfactor-tailleAcceleration*Yfactor), width , (height-tailleVert));
   noStroke();
   fill(#66BB6A);
-  rect(0, height-tailleVert, width , height);
+  rect(0, (height-tailleVert*Yfactor), width , height);
  
   
   obj.show();
@@ -80,7 +92,7 @@ void draw(){
 if(mousePressed){
   noStroke();
   if(first == null){
-   if(mouseY > height-tailleAcceleration-tailleVert){
+   if(mouseY > height-tailleAcceleration*Yfactor-tailleVert*Yfactor){
    first = new PVector(mouseX, mouseY); 
    c = getRandomColor();
    }
@@ -90,13 +102,12 @@ if(mousePressed){
   line(mouseX, mouseY, first.x, first.y);
     
  fill(255);
- ellipse(first.x, first.y, 10,10);
+ ellipse(first.x, first.y, 10*Xfactor,10*Yfactor);
     
   fill(c);
-  ellipse(mouseX, mouseY, rad, rad);
+  ellipse(mouseX, mouseY, rad*Xfactor, rad*Yfactor);
   //rad ++;
   }
- 
   
 }
 
@@ -114,8 +125,8 @@ if(obj.checkWin(planetes)){
 
 void mouseReleased(){
   if(first != null){
-  if(mouseY > height-tailleVert){
-  Planete p = new Planete(mouseX, mouseY, rad, rad * 100000000000f, c);
+  if(mouseY > height-tailleVert*Yfactor){
+  Planete p = new Planete(int(mouseX/Xfactor), int(mouseY/Yfactor), rad, rad * 100000000000f, c);
   p.vx = (first.x - mouseX)/20;
   p.vy = (first.y - mouseY)/20;
   planetes.add(p);
@@ -128,7 +139,10 @@ void mouseReleased(){
 
 
 color getRandomColor(){
-  color _c = color(random(255),random(255), random(255));
+  color _c;
+  do{
+      _c = color(random(255),random(255), random(255));
+  }while(green(_c)+red(_c)+blue(_c) < 100 || (green(_c)+red(_c)+blue(_c))%255 < 30);
   
   return _c;
   

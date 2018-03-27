@@ -30,11 +30,12 @@ class Particule{
   }
   
   void show(){
+ 
     float n = 255;
     noStroke();
     for(int i = 0; i < 8; i++){
     fill(red(c), green(c), blue(c), n);
-    ellipse(pos.x, pos.y, i, i);
+    ellipse(pos.x*Xfactor, pos.y*Yfactor, i*Xfactor, i*Yfactor);
     n = n/i;
   }
     stroke(0);
