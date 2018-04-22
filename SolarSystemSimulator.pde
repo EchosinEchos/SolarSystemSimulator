@@ -1,13 +1,18 @@
 ArrayList<Planete> planetes;
 ArrayList<Planete> fix;
+ArrayList<Objectif> obj = new ArrayList();
 ArrayList<Particule> particules;
-objectif obj;
+PVector etoiles[] = new PVector[15];
+boolean used[];
+char dificulty = 4;
+
 int rad = 15;
 PVector first;
 color c;
 
-int tailleVert = 150, tailleAcceleration = 350;
 
+
+int tailleVert = 150, tailleAcceleration = 350;
 float Xfactor, Yfactor;
 
 
@@ -15,33 +20,26 @@ float Xfactor, Yfactor;
 void setup(){
   Xfactor = width / 1080f;
   Yfactor = height / 1920f;
-  
    
   
-  //size(400, 800);
+  //size(450, 800);
+  fullScreen();
+  
+  smooth();
+  used = new boolean[7];
   planetes = new ArrayList<Planete>();
   fix = new ArrayList<Planete>();
   particules = new ArrayList<Particule>();
-  fullScreen();
   frameRate(60);
   noStroke();
-  orientation(PORTRAIT);
-  obj = new objectif(new PVector(int(random(50, (width-50))), 150), int(100), color(50,50,250));
-
-  int yoff = int(250);
-  for(int i = 1; i < random(1,4); i++){
-    int rad = int(random(50, 300));
-    yoff += rad/2 + random(20,100);// +(int)random(0,100);
-    fix.add(new Planete(int(random(rad/2,1080-rad/2)), int(yoff) , rad, rad * 1000000000000f, getRandomColor()));
-    yoff += rad/2;
+  orientation(PORTRAIT);  
+  //openLevel();
+  randomLevel();
+  
+  for(int i=0; i < 15; i++){
+    etoiles[i] = new PVector(random(width), random(height-tailleVert*Yfactor-tailleAcceleration*Yfactor));
   }
   
-  
-  //fix.add(new Planete(int(random(80,width-80)), height/2, 300, 90000000000000f, #F06813));
-  //fix.add(new Planete(int(random(40,width-40)), height/4, 100, 30000000000000f));
-  //fix.add(new Planete(100, 100, 10, 100000000f));
-  //planetes.get(0).ax = 1;
-  //fix.add(new Planete(width/2, height/2, 50, 1f));
 }
 
 
@@ -52,15 +50,28 @@ void draw(){
   noStroke();
   
   strokeWeight(2);
+  stroke(83);
+  
+  for(PVector pos : etoiles){
+    stroke(random(150, 255));
+    ellipse(pos.x, pos.y, 2,2);
+  }
+  
   stroke(255);
   fill(#757575);
-  rect(0, (height-tailleVert*Yfactor-tailleAcceleration*Yfactor), width , (height-tailleVert));
+  rect(0, (height-tailleVert*Yfactor-tailleAcceleration*Yfactor), width , height);
   noStroke();
   fill(#66BB6A);
   rect(0, (height-tailleVert*Yfactor), width , height);
  
+  for(Objectif o : obj){
+    o.show();
+  }
   
-  obj.show();
+  for(int i = 0; i < particules.size(); i++){
+    particules.get(i).show(); 
+    particules.get(i).update();
+  }
   
   for(Planete p : fix){
     for(Planete p2 : planetes){
@@ -84,10 +95,6 @@ void draw(){
     }
   }
   
-  for(int i = 0; i < particules.size(); i++){
-    particules.get(i).show(); 
-    particules.get(i).update();
-  }
   
 if(mousePressed){
   noStroke();
@@ -110,17 +117,13 @@ if(mousePressed){
   }
   
 }
-
-if(obj.checkWin(planetes)){
-  /*textSize(60);
-  textAlign(CENTER);
-  fill(0,230,0);
-  text("You Win",width/2, height/2);
-  noLoop();*/
-  setup();
-  redraw();
-  //exit();
-  }
+for(Objectif o : obj){
+  if(o.checkWin(planetes)){
+    setup();
+    redraw();
+   }
+}
+  
 }
 
 void mouseReleased(){
@@ -146,4 +149,34 @@ color getRandomColor(){
   
   return _c;
   
+}
+
+
+void openLevel(){
+  JSONArray Level = loadJSONArray("data/Level.json");
+  JSONArray Obstacles = Level.getJSONArray(0);
+  for(int i = 0; i < Obstacles.size(); i++){
+   JSONObject current = Obstacles.getJSONObject(i);
+   fix.add(new Planete(current.getInt("x"), current.getInt("y"), current.getInt("radius"), current.getFloat("mass")));
+  }
+  
+  JSONArray objs = Level.getJSONArray(1);
+  for(int i = 0; i < objs.size(); i++){
+  JSONObject current = objs.getJSONObject(i);
+  obj.add(new Objectif(new PVector(current.getInt("x"), current.getInt("y")), current.getInt("radius"), "Terre"));
+  }
+  
+  tailleVert = Level.getInt(2);
+  tailleAcceleration = Level.getInt(3);
+}
+void randomLevel(){
+  obj.add(new Objectif(new PVector(int(random(50, (width-50))), 150), int(100), "Terre"));
+
+  int yoff = int(250);
+  for(int i = 1; i < random(1,dificulty); i++){
+    int rad = int(random(50, dificulty*75));
+    yoff += rad/2 + random(20,100);// +(int)random(0,100);
+    fix.add(new Planete(int(random(rad/2,1080-rad/2)), int(yoff) , rad, rad * 1000000000000f));
+    yoff += rad/2;
+  }
 }

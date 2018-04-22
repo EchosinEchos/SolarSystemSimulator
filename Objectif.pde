@@ -1,18 +1,18 @@
-class objectif{
+class Objectif{
   
   PVector pos;
-  color c;
+  PImage img;
   int radius;
   
-  objectif(PVector _pos, int rad, int _c){
+  Objectif(PVector _pos, int rad, String imgfile){
     pos = _pos;
     radius = rad;
-    c = _c;
+    img = loadImage(imgfile + ".png");
   }
   
   void show(){
-    fill(c);
-    ellipse(this.pos.x*Xfactor, this.pos.y*Yfactor, radius*Xfactor, radius*Yfactor);
+    imageMode(CENTER);
+    image(img, this.pos.x*Xfactor, this.pos.y*Yfactor, radius*Xfactor, radius*Yfactor);
   }
   
   boolean checkWin(ArrayList<Planete> list){

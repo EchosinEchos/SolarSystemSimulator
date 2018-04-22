@@ -5,6 +5,8 @@ class Planete  {
   float G = 6.67 * pow(10, -11);
   boolean del = false;
   color c;
+  float angle;
+  PImage img;
   
   
  Planete(int x, int y, int rad, float mas){
@@ -12,7 +14,19 @@ class Planete  {
    pos.y = y;
    radius = rad;
    mass = mas;
-   c = color(255);
+   
+   if(random(1) < 0){
+   c = getRandomColor();
+   }else{
+     int rang;
+     do{
+       rang = int(random(7));
+     }while(used[rang]);
+     
+     used[rang] = true;
+     img = loadImage(sprite.values()[rang]+".png");
+     angle = random(TWO_PI);
+   }
  } 
  
  Planete(int x, int y, int rad, float mas, color _c){
@@ -31,8 +45,18 @@ class Planete  {
 
   /*translate(this.pos.x, this.pos.y, 0);
   sphere(radius); */
-  fill(c);
+  if( img == null){
+    noStroke();
+    fill(c);
   ellipse(pos.x*Xfactor, pos.y*Yfactor, radius*Xfactor, radius*Yfactor);
+  }else{
+   imageMode(CENTER);
+   pushMatrix();
+   translate(pos.x*Xfactor, pos.y*Yfactor);
+   rotate(angle);
+   image(img, 0,0, radius*Xfactor, radius*Yfactor); 
+   popMatrix();
+  }
 
  }
  void move(){
@@ -65,8 +89,8 @@ class Planete  {
   void onTouch(Planete p){
    if(this.radius < p.radius){
      del = true;
-     p.radius = int(sqrt( pow(this.radius,2) + pow(p.radius,2)));
-     p.mass += this.mass;
+     /*p.radius = int(sqrt( pow(this.radius,2) + pow(p.radius,2)));
+     p.mass += this.mass;*/
    }
  }
  
