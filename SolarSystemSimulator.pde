@@ -1,6 +1,6 @@
 ArrayList<Planete> planetes;
 ArrayList<Planete> fix;
-ArrayList<Objectif> obj = new ArrayList();
+ArrayList<Objectif> obj;
 ArrayList<Particule> particules;
 PVector etoiles[] = new PVector[15];
 boolean used[];
@@ -22,14 +22,15 @@ void setup(){
   Yfactor = height / 1920f;
    
   
-  //size(450, 800);
-  fullScreen();
+  size(450, 800);
+  //fullScreen();
   
   smooth();
   used = new boolean[7];
   planetes = new ArrayList<Planete>();
   fix = new ArrayList<Planete>();
   particules = new ArrayList<Particule>();
+  obj = new ArrayList();
   frameRate(60);
   noStroke();
   orientation(PORTRAIT);  
@@ -57,12 +58,18 @@ void draw(){
     ellipse(pos.x, pos.y, 2,2);
   }
   
-  stroke(255);
-  fill(#757575);
-  rect(0, (height-tailleVert*Yfactor-tailleAcceleration*Yfactor), width , height);
+  
+  rectMode(CORNERS);
+  
   noStroke();
-  fill(#66BB6A);
+  fill(58,227,25,265);
   rect(0, (height-tailleVert*Yfactor), width , height);
+  
+  stroke(255);
+  noFill();
+  strokeWeight(4+sin(frameCount*PI/73f));
+  fill(184,178,184,79);
+  rect(1, (height-tailleVert*Yfactor-tailleAcceleration*Yfactor), width -2 , height -2);
  
   for(Objectif o : obj){
     o.show();
@@ -120,7 +127,7 @@ if(mousePressed){
 for(Objectif o : obj){
   if(o.checkWin(planetes)){
     setup();
-    redraw();
+    break;
    }
 }
   
