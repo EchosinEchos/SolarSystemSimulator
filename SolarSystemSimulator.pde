@@ -2,7 +2,7 @@ ArrayList<Planete> planetes;
 ArrayList<Planete> fix;
 ArrayList<Objectif> obj;
 ArrayList<Particule> particules;
-PVector etoiles[] = new PVector[15];
+ArrayList<PVector> etoiles;
 boolean used[];
 char dificulty = 4;
 
@@ -25,20 +25,21 @@ void setup(){
   size(450, 800);
   //fullScreen();
   
-  smooth();
+  smooth(4);
   used = new boolean[7];
   planetes = new ArrayList<Planete>();
   fix = new ArrayList<Planete>();
   particules = new ArrayList<Particule>();
   obj = new ArrayList();
+  etoiles = new ArrayList();
   frameRate(60);
   noStroke();
   orientation(PORTRAIT);  
   //openLevel();
   randomLevel();
   
-  for(int i=0; i < 15; i++){
-    etoiles[i] = new PVector(random(width), random(height-tailleVert*Yfactor-tailleAcceleration*Yfactor));
+  for(int i=0; i < 50; i++){
+    etoiles.add(new PVector(random(width), random(height-tailleVert*Yfactor-tailleAcceleration*Yfactor)));
   }
   
 }
@@ -53,8 +54,9 @@ void draw(){
   strokeWeight(2);
   stroke(83);
   
-  for(PVector pos : etoiles){
-    stroke(random(150, 255));
+  for(int i = 0; i < etoiles.size(); i++){
+    PVector pos = etoiles.get(i);
+    stroke(150 + 70 * sin(frameCount/(i+1) + i*10 ));
     ellipse(pos.x, pos.y, 2,2);
   }
   
