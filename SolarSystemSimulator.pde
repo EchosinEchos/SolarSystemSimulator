@@ -1,9 +1,9 @@
-ArrayList<Planete> planetes;
-ArrayList<Planete> fix;
-ArrayList<Objectif> obj;
-ArrayList<Particule> particules;
-ArrayList<PVector> etoiles;
-boolean used[];
+ArrayList<Planete> planetes;          //Liste contenant les entités qui sont lancées
+ArrayList<Planete> fix;               //Liste des obstacles
+ArrayList<Objectif> obj;              //Liste des objectifs
+ArrayList<Particule> particules;      //Liste des particule
+ArrayList<PVector> etoiles;           //Liste des positions des etoiles (graphique)
+boolean used[];                       //List contenant true si ce sprite est usée
 char dificulty = 4;
 
 int rad = 15;
@@ -12,7 +12,7 @@ color c;
 
 
 
-int tailleVert = 150, tailleAcceleration = 350;
+int tailleVert = 150, tailleAcceleration = 350;     //Taille en pixels des zone authorisé pour lacer les 
 float Xfactor, Yfactor;
 
 
